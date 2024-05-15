@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="subforum">
+            {% if forums %}
+                <div class="subforum-title">
+                    <h1>Witaj na forum internetowym poświęconym tematyce FC Barcelony - klubowi uważanemu przez wielu za najlepszy w historii.</h1>
+                </div>
+
+                {% for forum in forums %}
+                    <div class="subforum-row">
+                        <div class="subforum-icon subforum-column center">
+                            <i class="fa fa-soccer-ball-o"></i>
+                        </div>
+                        <div class="subforum-description subforum-column">
+                            <h4><a href="{{forum.get_url}}">{{forum.title}}</a></h4>
+                            <p>Opis: {{forum.description}} </p>
+                        </div>
+                        <div class="subforum-stats subforum-column center">
+                            <span>{{forum.num_posts}} Posty</span>
+                        </div>
+                        <div class="subforum-info subforum-column">
+                            {% if forum.last_post %}
+                                <b><a href="{{forum.last_post.get_url}}">Ostatni post</a></b> napisany przez <a href="">{{forum.last_post.user.fullname|title}}</a>
+                                <br>dnia <small>{{forum.last_post.date|date}}</small>
+                            {% else %}
+                                <span>Brak postów w tej kategorii.</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                {% endfor %}
+            {% else %}
+                <div class="subforum-title">
+                    <h1><i class="fa fa-frown-o"></i>&nbsp;Brak postów w danej kategorii.</h1>
+                </div>
+            {% endif %}
+        </div>
+        <!--Więcej-->
+
+
+
+    </div>
+
+    <!-- Informacje o Forum -->
+    <div class="forum-info">
+        <div class="chart">
+            Moje Forum - Statystyki &nbsp;<i class="fa fa-bar-chart"></i>
+        </div>
+        <span><u>{{num_posts}}</u> Postów w <u>{{num_categories}}</u> Kategoriach od <u>{{num_users}}</u> Użytkowników.</span><br>
+        {% if forums %}
+            <span>Ostatni post: <b><a href="{{last_post.get_url}}">{{last_post.title}}</a></b> dnia {{last_post.date|date}} Przez <a href="">{{last_post.user.fullname|title}}</a></span>.<br>
+            <span>Sprawdź <a href="{% url 'latest_posts' %}">najnowsze posty</a> .</span><br>
+        {% endif %}
+    </div>
+
+    {% endblock content %}

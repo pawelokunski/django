@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load hitcount_tags %}
+{% block content %}
+    <div class="container">
+        <!--Nawigacja-->
+        <div class="navigate">
+            <span>Wyszukiwanie: {{query}} --> Znaleziono {{objects|length}} Wynik(i)</span>
+        </div>
+        <!--Wyświetlanie tabeli postów-->
+        <div class="posts-table">
+            <div class="table-head">
+                <div class="status">Status</div>
+                <div class="subjects">Tematy</div>
+                <div class="replies">Odpowiedzi/Odsłony</div>
+                <div class="last-reply">Ostatnia odpowiedź</div>
+            </div>
+
+            {% for post in objects %}
+            <div class="table-row">
+                <div class="status"><i class="fa fa-fire"></i></div>
+                <div class="subjects">
+                    <a href="{{post.get_url}}">{{post.title}}</a>
+                    <br>
+                    <span>Rozpoczęte przez <b><a href="">{{post.user.fullname|title}}</a></b> .</span>
+                </div>
+                <div class="replies">
+                    {{post.num_comments}} komentarzy <br> {% get_hit_count for post %} odsłon
+                </div>
+
+                {% if post.last_reply %}
+                <div class="last-reply">
+                    {{post.last_reply.date|date}}
+                    <br>Przez <b><a href="">{{post.last_reply.user.fullname|title}}</a></b>
+                </div>
+                {% else %}
+                <div class="last-reply">
+                    {{post.date|date}}
+                    <br>Przez <b><a href="">{{post.user.fullname|title}}</a></b>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+
+
+        </div>
+        <!--Paginacja rozpoczyna się-->
+            {% if objects.is_paginated %}
+            <div class="pagination">
+                strony: {% for num_page in posts.paginator.page_range %} <a href="?page={{num_page}}">{{num_page}}</a> {% endfor %}
+            </div>
+            {% endif %}
+        <!--Koniec paginacji-->
+    </div>
+
+    {% endblock content %}

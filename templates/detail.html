@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+<!--{% load hitcount_tags %}-->
+{% block content %}
+
+    <div class="container">
+        <!-- Nawigacja -->
+        <div class="navigate">
+            <span><a href="{% url 'home' %}">Moje Forum - Fora</a> >> <a href="{{post.categories.all.0.get_url}}">{{post.categories.all.0}}</a> >> <a href="{{post.get_url}}">{{post.title}}</a></span>
+        </div>
+
+        <!-- Sekcja tematu -->
+        <div class="topic-container">
+            <!-- Oryginalny wątek -->
+            <div class="head">
+                <div class="authors">Autor</div>
+                <div class="content">Temat: {{post.title}} (Przeczytany {% get_hit_count for post %} razy)</div>
+            </div>
+
+            <div class="body">
+                <div class="authors">
+                    <div class="username"><a href="">{{post.user.fullname|title}}</a></div>
+                    <div>Rola</div>
+                    <img src="{{post.user.profile_pic.url}}" alt="">
+                    <div>Posty: <u>{{post.user.num_posts}}</u></div>
+                    <div>Punkty: <u>{{post.user.points}}</u></div>
+                </div>
+                <div class="content">
+                    {{post.content|safe}}
+                    <br>
+                    <div class="comment">
+                        <button onclick="showComment()">Komentarz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Obszar komentarzy -->
+        {% if post.closed == True %}
+        <div style="background-color:#fff;color:#000;font-weight:bolder;padding:20px;width:100%;"> Ten temat jest zamknięty! </div>
+        {% else %}
+        {% if request.user.is_authenticated %}
+        <form action="." method="post">
+            {% csrf_token %}
+            <div class="comment-area hide" id="comment-area">
+                <textarea name="comment" id="" placeholder="skomentuj tutaj ... "></textarea>
+                <input type="submit" value="wyślij" name="comment-form">
+            </div>
+        </form>
+        {% else %}
+<div style="background-color:#fff;color:#000;font-weight:bolder;padding:20px;width:100%;"> Musisz <a href="{% url 'signin' %}"><b>zalogować się</b></a>, aby skomentować lub odpowiedzieć.! </div>
+
+        {% endif %}
+
+        {% endif %}
+
+        <!-- Sekcja komentarzy -->
+
+        {% for comment in post.comments.all %}
+        <div class="comments-container">
+            <div class="body">
+                <div class="authors">
+                    <div class="username"><a href="">{{comment.user.fullname|title}}</a></div>
+                    <div>Rola</div>
+                    <img src="{{comment.user.profile_pic.url}}" alt="">
+                    <div>Posty: <u>{{comment.user.num_posts}}</u></div>
+                    <div>Punkty: <u>{{comment.user.points}}</u></div>
+                </div>
+                <div class="content">
+                    {{comment.content}}
+                    <br>
+                    {% if request.user.is_authenticted %}
+                    <div class="comment">
+                        <button onclick="showReplies('comment{{comment.id}}')">Odpowiedz</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Obszar odpowiedzi -->
+        <form action="." method="post">
+            {% csrf_token %}
+            <div class="comment-area hide" id="comment{{comment.id}}">
+                <textarea name="reply" id="" placeholder="odpowiedz tutaj ... "></textarea>
+                <input type="submit" value="wyślij" name="reply-form">
+                <input type="hidden" name="comment-id" value="{{comment.id}}">
+            </div>
+        </form>
+
+        <!-- Sekcja odpowiedzi -->
+        {% for reply in comment.replies.all %}
+        <div class="comments-container" style="width: 95%; margin-left:5%;">
+            <div class="body">
+                <div class="authors">
+                    <div class="username"><a href="">{{reply.user.fullname|title}}</a></div>
+                    <div>Rola</div>
+                    <img src="{{reply.user.profile_pic.url}}" alt="">
+                    <div>Posty: <u>{{reply.user.num_posts}}</u></div>
+                    <div>Punkty: <u>{{reply.user.points}}</u></div>
+                </div>
+                <div class="content">
+                    {{reply.content}}
+                    <br>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% endfor %}
+
+
+
+
+    </div>
+    {% endblock content %}

@@ -5,7 +5,6 @@
 
 <h1 style="text-align:center; margin-block:50px; color:red;">{% trans "Hej" %} {{user}}, {% trans "Napisz coś" %}</h1>
 
-{% if request.user.is_authenticated %}
 <form method="POST" style="margin-left:150px;">
     {% csrf_token %}
     {{ form|crispy }}
@@ -13,6 +12,5 @@
 </form>
 {% else %}
 <div style="background-color:#fff;color:#000;font-weight:bolder;padding:20px;width:100%;"> Musisz <a href="{% url 'signin' %}"><b>zalogować się</b></a>, aby móc dodać posta. </div>
-{% endif %}
 
 {% endblock content %}

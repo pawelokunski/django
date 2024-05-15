@@ -24,12 +24,13 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("KEY")
+SECRET_KEY = "mj16$30&s%(@9(k1-zuo2=s25p#i$matld^(6eje4co+@llx"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG")
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 
 # Application definition
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -132,11 +134,11 @@ LOCALE_PATHS = [
 
 
 STATIC_URL = '/static/'
-if DEBUG:
-    STATICFILES_DIRS = [BASE_DIR / 'static']
-else:
-    STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # else:
 
 
@@ -145,4 +147,4 @@ MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())

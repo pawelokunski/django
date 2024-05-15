@@ -49,7 +49,7 @@ def detail(request, slug):
 
     context = {
         "post":post,
-        "title": "OZONE: "+post.title,
+        "title": post.title,
     }
     update_views(request, post)
 

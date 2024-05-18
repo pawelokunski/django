@@ -43,15 +43,23 @@ def signin(request):
 @login_required
 def update_profile(request):
     context = {}
-    user = request.user 
+    user = request.user
     form = UpdateForm(request.POST, request.FILES)
     if request.method == "POST":
         if form.is_valid():
-            update_profile = form.save(commit=False)
-            update_profile.user = user
-            update_profile.save()
-            return redirect("home")
-
+            fullname = form.cleaned_data.get("fullname")
+            bio = form.cleaned_data.get('bio')
+            profile_pic = form.cleaned_data.get('profile_pic')
+            if not fullname or not bio or not profile_pic:
+                messages.error(request,
+                               "Wszystkie pola (Imię i nazwisko, Biogram, Zdjęcie profilowe) muszą być uzupełnione.")
+            else:
+                update_profile = form.save(commit=False)
+                update_profile.user = user
+                update_profile.save()
+                return redirect("home")
+        else:
+            return redirect("update_profile")
     context.update({
         "form": form,
         "title": "Aktualizacja profilu",

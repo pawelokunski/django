@@ -1,5 +1,6 @@
 from django import forms
 from main.models import Author
+from django.utils.translation import gettext_lazy as _
 
 
 class UpdateForm(forms.ModelForm):
@@ -7,5 +8,7 @@ class UpdateForm(forms.ModelForm):
         model = Author
         fields = ("fullname", "bio", "profile_pic")
         labels = {
-            "fullname": "Imię i nazwisko",
+            "fullname": _("Imię i nazwisko"),
+            "bio": _("Biogram"),
+            "profile_pic": _("Zdjęcie profilowe"),
         }

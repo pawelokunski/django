@@ -1,13 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'basev2.html' %}
 {% load crispy_forms_tags %}
+{% load i18n %}
 {% block content %}
 
-<h1 style="text-align:center; margin-block:50px; color:red;">Hej {{user}}, Zostań autorem</h1>
+<h1 style="text-align:center; margin-block:50px; color:red;">{% trans "Hej" %} {{ user }}, {% trans "Aktualizuj swój profil" %}</h1>
 
-<form method="POST" action="." enctype="multipart/form-data" style="margin-left:150px;margin-bottom: 150px;">
+<form method="POST" enctype="multipart/form-data" style="margin-left:150px;">
     {% csrf_token %}
-    {{form|crispy}}
-    <input type="submit" value="Aktualizuj"  style="margin-block:50px;">
+    {{ form|crispy }}
+    <input type="submit" value="{% trans "Zapisz" %}" style="margin-block:50px;">
 </form>
 
 {% endblock content %}

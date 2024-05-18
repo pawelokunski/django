@@ -82,7 +82,6 @@ def create_post(request):
     form = PostForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            print("\n\n its valid")
             author = Author.objects.get(user=request.user)
             new_post = form.save(commit=False)
             new_post.user = author

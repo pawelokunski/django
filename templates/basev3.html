@@ -37,21 +37,7 @@
             <div style="font-size:50px;font-weight:300px;margin-left:100px;"><a href="{% url 'create_post' %}">+</a></div>
             {% endif %}
         </div>
-
-        <!-- Sekcja pola wyszukiwania -->
-        <form action="{% url 'search_result' %}" role="form" method="GET">
-            <div class="search-box">
-                <div>
-                    <select name="search-box" id="">
-                        <option value="Everything">Wszystko</option>
-                        <option value="Titles">Tytuły</option>
-                        <option value="Descriptions">Opisy</option>
-                    </select>
-                    <input type="text" name="q" placeholder="szukaj ...">
-                    <button type="submit" name="search"><i class="fa fa-search"></i></button>
-                </div>
-            </div>
-        </form>
+    
     </header>
     {% if messages %}
         {% for message in messages %}

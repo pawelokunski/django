@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils.translation import gettext_lazy as _
+from django.contrib import messages
 
 
 def home(request):
@@ -82,12 +83,20 @@ def create_post(request):
     form = PostForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            author = Author.objects.get(user=request.user)
-            new_post = form.save(commit=False)
-            new_post.user = author
-            new_post.save()
-            form.save_m2m()
-            return redirect("home")
+            title = form.cleaned_data.get("title")
+            tresc = form.cleaned_data.get('content')
+            categ = form.cleaned_data.get('categories')
+            tags = form.cleaned_data.get('tags')
+            if not title or not tresc or not categ or not tags:
+                messages.error(request,
+                               "Wszystkie pola muszą być uzupełnione.")
+            else:
+                author = Author.objects.get(user=request.user)
+                new_post = form.save(commit=False)
+                new_post.user = author
+                new_post.save()
+                form.save_m2m()
+                return redirect("home")
     context.update({
         "form": form,
         "title": _("Tworzenie nowego posta")

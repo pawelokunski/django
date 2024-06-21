@@ -24,10 +24,10 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "mj16$30&s%(@9(k1-zuo2=s25p#i$matld^(6eje4co+@llx"
+SECRET_KEY = env("KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
